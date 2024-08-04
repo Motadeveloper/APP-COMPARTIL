@@ -1,0 +1,98 @@
+{% load static %}
+
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <title>Consultar Agendamento | Compartil Locações</title>
+</head>
+<body>
+    {% include 'navbar_cliente.html' %}
+
+    <br><br><br><br>
+    <div class="container">
+        <h1>Consultar Agendamento</h1>
+        {% if messages %}
+            {% for message in messages %}
+            </br>
+                <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        <div class="search-container">
+            <form method="post" action="{% url 'cliente' %}">
+                {% csrf_token %}
+                </br>
+                <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF" required>
+                <button type="submit">Buscar</button>
+            </form>
+        </div>
+        </br>
+        <div class="cards-wrapper">
+            {% if agendamentos %}
+                {% for agendamento in agendamentos %}
+                <div class="card">
+                    <img src="{{ agendamento.equipamento.fotos.url }}" alt="{{ agendamento.equipamento.nome }}">
+                    <div class="card-body">
+                        <h1>{{ agendamento.equipamento.nome }}</h1>
+                        <label>
+                            <strong>Dados do Cliente:</strong>
+                            <p>Nome Completo: {{ agendamento.cliente.nome_completo }}</p>
+                        </label>
+                        <label>
+                            <strong>Dados da Locação:</strong>
+                            <p>Data Inicial: {{ agendamento.data_inicio }}</p>
+                            <p>Hora de Início: {{ agendamento.hora_inicio }}</p>
+                            <p>Hora Final: {{ agendamento.hora_final }}</p>
+                            <p>Data Final: {{ agendamento.data_fim }}</p>
+                            <p>Opção de Frete: {{ agendamento.opcao_frete }}</p>
+                            <p>Valor do Frete: R$ {{ agendamento.frete_total }}</p>
+                            <p>Valor Total: R$ {{ agendamento.valor_total }}</p>
+                        </label>
+                        <label>
+                            <strong>Dados de Entrega/Coleta:</strong>
+                            <p>Logradouro: {{ agendamento.logradouro }}</p>
+                            <p>Número: {{ agendamento.numero }}</p>
+                            <p>Complemento: {{ agendamento.complemento }}</p>
+                            <p>CEP: {{ agendamento.cep }}</p>
+                        </label>
+                        <button class="cancel-button" onclick="confirmCancellation('{{ agendamento.id }}')">Cancelar equipamento</button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>Nenhum agendamento encontrado.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="confirmation-dialog" id="confirmation-dialog">
+        <p>Tem certeza que deseja cancelar este agendamento?</p>
+        <form id="cancel-form" method="post" action="">
+            {% csrf_token %}
+            <button type="submit" class="confirm">Confirmar</button>
+            <button type="button" class="cancel" onclick="closeDialog()">Cancelar</button>
+        </form>
+    </div>
+
+    
+</body>
+<script>
+        function confirmCancellation(agendamentoId) {
+            document.getElementById('cancel-form').action = '/cancelar_agendamento/' + agendamentoId + '/';
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('confirmation-dialog').style.display = 'block';
+        }
+
+        function closeDialog() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('confirmation-dialog').style.display = 'none';
+        }
+    </script>
+
+
+</html>

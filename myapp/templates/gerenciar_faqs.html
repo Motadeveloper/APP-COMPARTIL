@@ -1,0 +1,134 @@
+<!-- gerenciar_faqs.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar FAQs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-group textarea {
+            height: 100px;
+        }
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .faq-list {
+            margin-top: 20px;
+        }
+        .faq-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .actions {
+            margin-top: 10px;
+        }
+        .actions button {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .actions button:hover {
+            background-color: #c82333;
+        }
+        .actions .btn-edit {
+            background-color: #007bff;
+        }
+        .actions .btn-edit:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerenciar FAQs</h1>
+        <form method="post">
+            {% csrf_token %}
+            {% if form.instance.pk %}
+                <input type="hidden" name="id" value="{{ form.instance.pk }}">
+            {% endif %}
+            <div class="form-group">
+                <label for="titulo">Título</label>
+                {{ form.titulo }}
+            </div>
+            <div class="form-group">
+                <label for="descricao">Descrição</label>
+                {{ form.descricao }}
+            </div>
+            <button type="submit" name="{% if form.instance.pk %}editar{% else %}criar{% endif %}" class="btn">
+                {% if form.instance.pk %}Atualizar FAQ{% else %}Criar FAQ{% endif %}
+            </button>
+        </form>
+
+        <div class="faq-list">
+            {% for faq in faqs %}
+                <div class="faq-item">
+                    <h2>{{ faq.titulo }}</h2>
+                    <p>{{ faq.descricao }}</p>
+                    <div class="actions">
+                        <form method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ faq.id }}">
+                            <button type="submit" name="apagar" class="btn">Apagar</button>
+                        </form>
+                        <form method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ faq.id }}">
+                            <button type="submit" name="editar" class="btn btn-edit">Editar</button>
+                        </form>
+                    </div>
+                </div>
+            {% empty %}
+                <p>Nenhum FAQ encontrado.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!-- frete/templates/frete/calcular_entrega.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcular Entrega</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-5">Calcular Frete</h2>
+        <form method="post" class="mt-4">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.cep.label_tag }} 
+                {{ form.cep }}
+            </div>
+            <button type="submit" class="btn btn-primary">Calcular Frete</button>
+        </form>
+
+        {% if frete_calculado %}
+            <div class="mt-4">
+                <h3>Frete Calculado: R$ {{ form.cleaned_data.frete }}</h3>
+                <p>O local de entrega está a {{ distancia|floatformat:2 }} km da nossa base no Pina, Recife.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

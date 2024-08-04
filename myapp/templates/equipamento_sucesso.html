@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Equipamento Adicionado{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Equipamento adicionado com sucesso!</h2>
+    <a href="{% url 'adicionar_equipamento' %}" class="btn btn-primary">Adicionar Outro Equipamento</a>
+</div>
+{% endblock %}

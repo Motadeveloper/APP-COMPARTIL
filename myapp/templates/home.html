@@ -1,0 +1,135 @@
+{% load static %}
+
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <title>Compartil Locações | Alugue extratora, câmeras, geradores sem sair de casa</title>
+</head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap">
+    <style>
+        .banner h2 {
+            font-family: 'Poppins', sans-serif; /* Fonte personalizada */
+            font-size: 3.5em; /* Tamanho da fonte */
+            font-weight: 700; /* Peso da fonte (grosso) */
+        }
+        .banner p {
+            font-family: 'Poppins', sans-serif; /* Fonte personalizada */
+            font-size: 4em; /* Tamanho da fonte */
+            font-weight: 700; /* Peso da fonte (grosso) */
+        }
+        
+
+    </style>
+<body>
+    {% include 'navbar_cliente.html' %}
+    
+    <section class="hero" id="home" style="background-image: url('{% static 'assets/img/hero-banner.jpg' %}')">
+    
+        <div class="container">
+            <div class="banner">
+                <p style="color: white;">Alugue Agora</p>
+                <h2 style="color: white;">Sem sair de casa</h2>
+
+               
+            </div>
+        </div>
+    </section>
+
+    <section class="service">
+        <div class="container">
+            <ul class="service-list">
+                <li class="service-item">
+                    <div class="service-item-icon">
+                        <img src="{% static 'assets/img/service-icon-1.png' %}" alt="Service icon">
+                    </div>
+                    <div class="service-content">
+                        <p class="service-item-title">Pontualidade</p>
+                        <p class="service-item-text">no horário agendado</p>
+                    </div>
+                </li>
+                <li class="service-item">
+                    <div class="service-item-icon">
+                        <img src="{% static 'assets/img/service-icon-2.svg' %}" alt="Service icon">
+                    </div>
+                    <div class="service-content">
+                        <p class="service-item-title">Video Tutorial</p>
+                        <p class="service-item-text">Fácil manuseio </p>
+                    </div>
+                </li>
+                <li class="service-item">
+                    <div class="service-item-icon">
+                        <img src="{% static 'assets/img/service-icon-3.svg' %}" alt="Service icon">
+                    </div>
+                    <div class="service-content">
+                        <p class="service-item-title">Pague na Entrega</p>
+                        <p class="service-item-text">Pix, Débito e Crédito</p>
+                    </div>
+                </li>
+                <li class="service-item">
+                    <div class="service-item-icon">
+                        <img src="{% static 'assets/img/service-icon-4.svg' %}" alt="Service icon">
+                    </div>
+                    <div class="service-content">
+                        <p class="service-item-title">Whatsapp</p>
+                        <p class="service-item-text">Suporte imediato</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+       
+    <div class="card-container-wrapper">
+        <section class="card-container" id="equipamentos">
+            <h1>Equipamentos</h1>
+            <div class="categories">
+                <span class="category active" data-category="all" style="background-color: #000; color: #ffffff;">All</span>
+                {% for categoria in categorias %}
+                <span class="category" data-category="{{ categoria.id }}" style="background-color: {{ categoria.cor }}; color: #ffffff;">{{ categoria.nome }}</span>
+                {% endfor %}
+            </div>
+            
+            {% for equipamento in equipamentos %}
+            <div class="card" data-category="{{ equipamento.categoria.id }}">
+                <div class="card-header">
+                    <h3>{{ equipamento.nome|truncatechars:10 }}</h3>
+                    <p>{{ equipamento.descricao|truncatechars:40 }}</p>
+                    <span style="background-color: {{ equipamento.categoria.cor }}; color: #ffffff;">{{ equipamento.categoria.nome }}</span>
+                </div>
+                <div class="card-img">
+                    <img src="{{ equipamento.fotos.url }}" alt="{{ equipamento.nome }}">
+                    <i class="bx bx-heart"></i>
+                </div>
+                <div class="card-details">
+                    <div class="price">
+                        <p>Diária</p>
+                        <strong>R${{ equipamento.preco_diaria }}</strong>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'detalhes_equipamento' equipamento.id %}">
+                    </br>
+                        <button>Alugue agora</button>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+    </div>
+
+    <section class="centralize">
+        {% include 'faq.html' %}
+    </section>
+
+        {% include 'footer.html' %}
+   
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="{% static 'js/home.js' %}"></script>
+    
+</body>
+</html>

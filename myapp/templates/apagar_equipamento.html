@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Apagar Equipamento{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Apagar Equipamento</h2>
+    <p>Você tem certeza de que deseja apagar o equipamento "{{ equipamento.nome }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Apagar</button>
+        <a href="{% url 'lista_equipamentos' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

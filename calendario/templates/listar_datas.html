@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load calendario_extras %}
+{% block content %}
+<h2>Próximas 30 Datas</h2>
+<ul>
+    {% for data in datas %}
+        <li style="color: {% if reservas|get_item:data %}red{% endif %};">
+            {{ data }} - {% if reservas|get_item:data %}Reservado{% else %}Disponível{% endif %}
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'reservar_data' %}">Reservar uma Data</a>
+{% endblock %}

@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Equipamentos{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Lista de Equipamentos</h2>
+    <div class="row">
+        {% for equipamento in equipamentos %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="{{ equipamento.fotos.url }}" class="card-img-top" alt="{{ equipamento.nome }}">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{% url 'detalhes_equipamento' id=equipamento.id %}">{{ equipamento.nome }}</a>
+                    </h5>
+                    <p class="card-text">{{ equipamento.descricao }}</p>
+                    <p class="card-text">Preço Diária: {{ equipamento.preco_diaria }}</p>
+                    
+                    <!-- Campo para inserir o CEP -->
+                    <label for="cep_{{ equipamento.id }}">CEP de Entrega:</label>
+                    <input type="text" id="cep_{{ equipamento.id }}" class="cep-input" data-equip-id="{{ equipamento.id }}">
+                    <button class="calcular-frete" data-equip-id="{{ equipamento.id }}">Calcular Frete</button>
+                    <div class="loading-spinner" id="loading_{{ equipamento.id }}" style="display:none;"></div> <!-- Animação de Carregamento -->
+                    
+                    <p class="card-text"><strong>Entrega e Coleta</strong></p>
+                    <p class="card-text">Valor Total do Frete: R$ <span id="frete_total_{{ equipamento.id }}">0.00</span></p>
+                    <p class="card-text">Valor da Entrega: R$ <span id="entrega_{{ equipamento.id }}">0.00</span></p>
+                    <p class="card-text">Valor da Coleta: R$ <span id="coleta_{{ equipamento.id }}">0.00</span></p>
+                    
+                    <!-- Adicionando calendário fixo -->
+                    <div class="calendar-container">
+                        <label for="start_date_{{ equipamento.id }}">Data de Início:</label>
+                        <input type="text" id="start_date_{{ equipamento.id }}" class="date-picker" data-equip-id="{{ equipamento.id }}">
+                        <label for="end_date_{{ equipamento.id }}">Data de Término:</label>
+                        <input type="text" id="end_date_{{ equipamento.id }}" class="date-picker" data-equip-id="{{ equipamento.id }}">
+                    </div>
+                    
+                    <p class="card-text">Total: R$ <span id="total_{{ equipamento.id }}">0.00</span></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const datePickers = document.querySelectorAll(".date-picker");
+    const calcularFreteButtons = document.querySelectorAll(".calcular-frete");
+
+    datePickers.forEach(function(datePicker) {
+        const equipId = datePicker.getAttribute('data-equip-id');
+        
+        fetch(`/api/equipamento/${equipId}/disponibilidade/`)
+            .then(response => response.json())
+            .then(data => {
+                const disableDates = Object.keys(data).filter(date => !data[date]);
+
+                flatpickr(`#start_date_${equipId}`, {
+                    dateFormat: "Y-m-d",
+                    minDate: "today",
+                    locale: {
+                        firstDayOfWeek: 0,
+                        weekdays: {
+                            shorthand: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+                            longhand: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
+                        },
+                        months: {
+                            shorthand: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                            longhand: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        },
+                    },
+                    disable: disableDates,
+                    onChange: function(selectedDates, dateStr, instance) {
+                        const startDate = document.getElementById(`start_date_${equipId}`).value;
+                        const endDate = document.getElementById(`end_date_${equipId}`).value;
+                        
+                        if (startDate && endDate) {
+                            const start = new Date(startDate);
+                            const end = new Date(endDate);
+                            const diffTime = Math.abs(end - start);
+                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                            fetch(`/api/equipamento/${equipId}/preco_diaria/`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    const total = diffDays * data.preco_diaria;
+                                    document.getElementById(`total_${equipId}`).innerText = total.toFixed(2);
+                                });
+                        }
+                    },
+                    onDayCreate: function(dObj, dStr, fp, dayElem) {
+                        const date = dayElem.dateObj.toISOString().split('T')[0];
+                        if (disableDates.includes(date)) {
+                            dayElem.classList.add('flatpickr-disabled');
+                            dayElem.style.backgroundColor = '#ff4d4d';
+                            dayElem.style.pointerEvents = 'none';
+                        } else if (dayElem.dateObj < new Date()) {
+                            dayElem.classList.add('flatpickr-past-date');
+                        } else {
+                            dayElem.style.backgroundColor = '#228B22';  // Verde mais escuro
+                            dayElem.style.color = 'white';
+                            dayElem.style.fontWeight = 'bold';
+                            dayElem.style.pointerEvents = 'auto';
+                        }
+                    }
+                });
+
+                flatpickr(`#end_date_${equipId}`, {
+                    dateFormat: "Y-m-d",
+                    minDate: "today",
+                    locale: {
+                        firstDayOfWeek: 0,
+                        weekdays: {
+                            shorthand: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+                            longhand: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
+                        },
+                        months: {
+                            shorthand: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                            longhand: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        },
+                    },
+                    disable: disableDates,
+                    onChange: function(selectedDates, dateStr, instance) {
+                        const startDate = document.getElementById(`start_date_${equipId}`).value;
+                        const endDate = document.getElementById(`end_date_${equipId}`).value;
+                        
+                        if (startDate && endDate) {
+                            const start = new Date(startDate);
+                            const end = new Date(endDate);
+                            const diffTime = Math.abs(end - start);
+                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                            fetch(`/api/equipamento/${equipId}/preco_diaria/`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    const total = diffDays * data.preco_diaria;
+                                    document.getElementById(`total_${equipId}`).innerText = total.toFixed(2);
+                                });
+                        }
+                    },
+                    onDayCreate: function(dObj, dStr, fp, dayElem) {
+                        const date = dayElem.dateObj.toISOString().split('T')[0];
+                        if (disableDates.includes(date)) {
+                            dayElem.classList.add('flatpickr-disabled');
+                            dayElem.style.backgroundColor = '#ff4d4d';
+                            dayElem.style.pointerEvents = 'none';
+                        } else if (dayElem.dateObj < new Date()) {
+                            dayElem.classList.add('flatpickr-past-date');
+                        } else {
+                            dayElem.style.backgroundColor = '#228B22';  // Verde mais escuro
+                            dayElem.style.color = 'white';
+                            dayElem.style.fontWeight = 'bold';
+                            dayElem.style.pointerEvents = 'auto';
+                        }
+                    }
+                });
+            });
+    });
+
+    calcularFreteButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            const equipId = this.getAttribute('data-equip-id');
+            const cep = document.getElementById(`cep_${equipId}`).value;
+            const loadingSpinner = document.getElementById(`loading_${equipId}`);
+            loadingSpinner.style.display = 'block'; // Mostrar animação de carregamento
+            fetch(`/frete/calcular-entrega/?cep=${cep}`)
+                .then(response => response.json())
+                .then(data => {
+                    loadingSpinner.style.display = 'none'; // Ocultar animação de carregamento
+                    const valorFrete = data.valor_frete.toFixed(2);
+                    const metadeFrete = (valorFrete / 2).toFixed(2);
+                    document.getElementById(`frete_total_${equipId}`).innerText = valorFrete;
+                    document.getElementById(`entrega_${equipId}`).innerText = metadeFrete;
+                    document.getElementById(`coleta_${equipId}`).innerText = metadeFrete;
+                })
+                .catch(error => {
+                    loadingSpinner.style.display = 'none'; // Ocultar animação de carregamento
+                    console.error('Erro ao calcular o frete:', error);
+                });
+        });
+    });
+});
+</script>
+
+<style>
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+.date-picker {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+.flatpickr-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+.flatpickr-past-date {
+    background-color: #d3d3d3; /* Cinza claro */
+    color: #d3d3d3; /* Cinza claro */
+    opacity: 0.1; /* Transparência de 10% */
+    pointer-events: none; /* Não clicável */
+}
+.loading-spinner {
+    border: 8px solid #f3f3f3; /* Cinza claro */
+    border-top: 8px solid #3498db; /* Azul */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+    margin: 10px auto;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.calcular-frete {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+}
+.calcular-frete:hover {
+    background-color: #2980b9;
+}
+.cep-input {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,271 @@
+:root {
+  /**
+   * typography
+   */
+
+  --ff-jost: "Jost", sans-serif;
+
+  --fs-1: 3.5rem;
+  --fs-2: 1.75rem;
+  --fs-3: 2.625rem;
+  --fs-4: 1.5rem;
+  --fs-5: 1.375rem;
+  --fs-6: 1.25rem;
+  --fs-7: 1.125rem;
+  --fs-8: 0.938rem;
+  --fs-9: 0.875rem;
+  --fs-10: 0.813rem;
+
+  --fw-500: 500;
+  --fw-600: 600;
+}
+
+/*-----------------------------------*\
+ * #HERO
+\*-----------------------------------*/
+.hero {
+background-repeat: no-repeat;
+background-size: cover;
+background-position: left;
+width: 100%;
+margin-top: 0px;
+min-height: 80vh;
+padding-block: var(--section-padding);
+display: flex;
+align-items: center;
+font-family: var(--ff-jost); /* Adicionando a fonte Jost */
+}
+
+.hero .container { width: 100%; }
+
+.hero-subtitle {
+color: var(--eerie-black);
+font-size: 3rem;
+font-weight: var(--fw-600);
+margin-bottom: 20px;
+}
+
+.hero-title {
+margin-bottom: 35px;
+max-width: 12ch;
+font-size: 4rem;
+}
+
+/*-----------------------------------*\
+* #SERVICE
+\*-----------------------------------*/
+.service {
+padding-block: 45px;
+background-color: #f9f9f9;
+}
+
+.service-list {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+align-items: center;
+gap: 40px;
+}
+
+.service-item {
+max-width: 235px;
+width: 100%;
+display: flex;
+justify-content: flex-start;
+align-items: center;
+gap: 20px;
+}
+
+.service-item-icon { width: 45px; }
+
+.service-item-icon img { margin-inline: auto; }
+
+.service-item-title {
+color: var(--eerie-black);
+font-size: var(--fs-7);
+font-weight: var(--fw-600);
+}
+
+/*-----------------------------------*\
+* #CARDS
+\*-----------------------------------*/
+.card-container-wrapper {
+width: 100%;
+display: flex;
+justify-content: center;
+background-color: #f7f7f7; /* Background branco */
+padding: 20px 0;
+}
+
+.card-container {
+width: 100%;
+max-width: 1200px; /* Limita a largura total dos cards */
+display: flex;
+justify-content: center;
+align-items: flex-start;
+flex-wrap: wrap;
+gap: 20px;
+padding: 20px;
+}
+
+.card-container h1 {
+width: 100%;
+text-align: center;
+font-size: 2em;
+margin-bottom: 20px;
+}
+
+.categories {
+width: 100%;
+text-align: center;
+margin-bottom: 20px;
+}
+
+.categories .category {
+display: inline-block;
+padding: 5px 10px;
+border-radius: 12px;
+font-size: 18px;
+margin: 0 10px;
+margin-bottom: 10px;
+cursor: pointer; /* Adiciona a mãozinha */
+transition: background-color 0.3s, color 0.3s; /* Adiciona a transição suave */
+}
+
+.categories .category:hover {
+opacity: 0.8; /* Efeito de hover */
+}
+
+.categories .category.limpeza { background: #fef0f0; color: #f43c3c; }
+.categories .category.cameras { background: #e0f7fa; color: #00796b; }
+.categories .category.geradores { background: #fff3e0; color: #ef6c00; }
+.categories .category.projetores { background: #e8f5e9; color: #388e3c; }
+
+.card {
+position: relative;
+flex: 1 1 calc(33.33% - 20px); /* Ajusta a largura base dos cards */
+max-width: 320px; /* Define a largura máxima dos cards */
+height: min-content;
+padding: 25px;
+background: #ffffff;
+border: 2px solid #e1e3e6;
+border-radius: 20px;
+transition: .4s;
+box-sizing: border-box; /* Inclui o padding e a borda no tamanho total do elemento */
+}
+
+.card:hover {
+border-color: #ffffff;
+transform: translateY(-10px);
+box-shadow: 0 5px 12px rgba(0, 0, 0, .08);
+}
+
+.card .card-header h3 {
+color: #404d61;
+font-size: 28px;
+}
+
+.card .card-header p {
+color: #757d8a;
+font-size: 20px;
+}
+
+.card .card-header span {
+position: absolute;
+color: #f43c3c;
+background: #fef0f0;
+right: 25px;
+top: 25px;
+padding: 5px 10px;
+border-radius: 12px;
+font-size: 18px;
+}
+
+.card .card-img {
+position: relative;
+height: 220px;
+border-radius: 12px;
+margin: 22px 0;
+overflow: hidden;
+}
+
+.card .card-img img {
+width: 100%;
+height: 100%;
+transition: .4s;
+}
+
+.card:hover .card-img img {
+transform: scale(1.06);
+}
+
+.card .card-img i {
+cursor: pointer;
+position: absolute;
+top: 12px;
+right: 12px;
+color: #757d8a;
+background: #ffffff;
+padding: 6px;
+border-radius: 6px;
+}
+
+.card .card-details {
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.card .card-details .price p {
+color: #757d8a;
+font-size: 20px;
+}
+
+.card .card-details .price strong {
+color: #545d6d;
+font-size: 22px;
+}
+
+.card .card-footer button {
+cursor: pointer;
+width: 100%;
+height: 46px;
+border-radius: 12px;
+background: linear-gradient(#6787fd, #3f66f5);
+color: #ffffff;
+font-size: 20px;
+letter-spacing: .5px;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+.card {
+  flex: 1 1 calc(33.33% - 20px); /* Três cards por linha */
+  max-width: 320px; /* Ajusta a largura máxima */
+}
+}
+
+@media (max-width: 992px) {
+.card {
+  flex: 1 1 calc(50% - 20px); /* Dois cards por linha */
+  max-width: 320px; /* Ajusta a largura máxima */
+}
+}
+
+@media (max-width: 768px) {
+.card {
+  flex: 1 1 calc(100% - 20px); /* Um card por linha */
+  max-width: 350px; /* Ajusta a largura máxima */
+}
+}
+
+
+.centralize {
+display: flex;
+justify-content: center;
+align-items: center;
+text-align: center;
+width: 100%;
+min-height: 100vh; /* Ajuste conforme necessário */ /* Ajuste conforme necessário */
+box-sizing: border-box;
+}

@@ -1,27 +1,30 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/faq.css' %}">
 
-<div class="faq-container">
-    <div class="header-container">
-        <img src="{% static 'assets/img/icon-star.svg' %}" alt="icon-star">
-        <h1 class="heading">Dúvidas</h1>
-    </div>
-    {% if faqs %}
-        {% for faq in faqs %}
-        <div class="faq-item">
-            <h2 class="question" data-faq="{{ faq.id }}">
-                {{ faq.titulo }}
-                <img src="{% static 'assets/img/icon-minus.svg' %}" alt="icon-minus" class="icon" id="icon-minus-{{ faq.id }}">
-                <img src="{% static 'assets/img/icon-plus.svg' %}" alt="icon-plus" class="icon" id="icon-plus-{{ faq.id }}">
-            </h2>
-            <p>
-                {{ faq.descricao }}
-            </p>
+<div class="section-parent">
+    <div class="faq-container">
+        <div class="header-container">
+            <img src="{% static 'assets/img/icon-star.svg' %}" alt="icon-star">
+            <h1 class="heading">Dúvidas</h1>
         </div>
-        {% endfor %}
-    {% else %}
-        <p>Nenhum FAQ encontrado.</p>
-    {% endif %}
+        {% if faqs %}
+            {% for faq in faqs %}
+            <div class="faq-item">
+                <h2 class="question" data-faq="{{ faq.id }}">
+                    {{ faq.titulo }}
+                    <img src="{% static 'assets/img/icon-minus.svg' %}" alt="icon-minus" class="icon" id="icon-minus-{{ faq.id }}">
+                    <img src="{% static 'assets/img/icon-plus.svg' %}" alt="icon-plus" class="icon" id="icon-plus-{{ faq.id }}">
+                </h2>
+                <p>
+                    {{ faq.descricao }}
+                </p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhum FAQ encontrado.</p>
+        {% endif %}
+    </div>
 </div>
+
 
 <script src="{% static 'js/faq.js' %}"></script>

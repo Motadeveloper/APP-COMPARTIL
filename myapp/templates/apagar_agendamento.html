@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Apagar Agendamento{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Apagar Agendamento</h2>
+    <p>Tem certeza que deseja apagar o agendamento de <strong>{{ agendamento.equipamento.nome }}</strong> para <strong>{{ agendamento.cliente.nome_completo }}</strong>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Sim, Apagar</button>
+        <a href="{% url 'listar_agendamentos' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

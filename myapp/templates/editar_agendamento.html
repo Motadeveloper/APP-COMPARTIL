@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Agendamento{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Editar Agendamento</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+</div>
+{% endblock %}

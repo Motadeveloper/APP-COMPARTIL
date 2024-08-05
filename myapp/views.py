@@ -110,7 +110,7 @@ def sucesso(request):
 def detalhes_equipamento(request, id):
     equipamento = get_object_or_404(Equipamento, id=id)
     if request.method == 'POST':
-        form = AgendamentoForm(request.POST)
+        form = AgendamentoForm(request.POST, request.FILES)
         cliente_id = request.POST.get('cliente_id')
         cpf = request.POST.get('cpf')
         
@@ -119,14 +119,14 @@ def detalhes_equipamento(request, id):
         else:
             cliente = Cliente.objects.filter(cpf=cpf).first()
             if not cliente:
-                cliente_form = ClienteForm(request.POST)
+                cliente_form = ClienteForm(request.POST, request.FILES)
                 if cliente_form.is_valid():
                     cliente = cliente_form.save()
                 else:
                     return render(request, 'detalhes_equipamento.html', {'equipamento': equipamento, 'form': form, 'cliente_form': cliente_form})
 
         if not cliente:
-            cliente_form = ClienteForm(request.POST)
+            cliente_form = ClienteForm(request.POST, request.FILES)
             if cliente_form.is_valid():
                 cliente = cliente_form.save()
             else:
@@ -160,7 +160,7 @@ def detalhes_equipamento(request, id):
             # Atualizar a disponibilidade do próximo dia com base na hora_fim
             proxima_data = agendamento.data_fim
             horario_final = (datetime.combine(proxima_data, agendamento.hora_fim) + timedelta(hours=2)).time()
-            if horario_final < time(17, 0):  # Se o horário final mais 2 horas for antes do final do horário comercial
+            if horario_final < time(17, 0):
                 Disponibilidade.objects.update_or_create(
                     equipamento=equipamento,
                     data=proxima_data,
@@ -309,3 +309,99 @@ def gerenciar_faqs(request):
 def listar_faqs(request):
     faqs = FAQ.objects.all()
     return render(request, 'faq.html', {'faqs': faqs})
+
+def listar_agendamentos(request):
+    agendamentos = Agendamento.objects.all().order_by('data_inicio', 'hora_inicio')
+    return render(request, 'agendamento.html', {'agendamentos': agendamentos})
+
+def editar_agendamento(request, id):
+    agendamento = get_object_or_404(Agendamento, id=id)
+    if request.method == 'POST':
+        form = AgendamentoForm(request.POST, instance=agendamento)
+        if form.is_valid():
+            # Armazenar as datas antigas antes de salvar o novo agendamento
+            datas_antigas = [(agendamento.data_inicio + timedelta(days=dia)) for dia in range((agendamento.data_fim - agendamento.data_inicio).days + 1)]
+
+            # Salvar o novo agendamento sem commitar ainda
+            novo_agendamento = form.save(commit=False)
+
+            # Liberar datas antigas
+            for data in datas_antigas:
+                disponibilidade = Disponibilidade.objects.filter(equipamento=agendamento.equipamento, data=data).first()
+                if disponibilidade:
+                    # Verifica se existe algum outro agendamento para esta data
+                    outros_agendamentos = Agendamento.objects.filter(equipamento=agendamento.equipamento, data_inicio__lte=data, data_fim__gte=data).exclude(id=agendamento.id)
+                    if not outros_agendamentos.exists():
+                        disponibilidade.disponivel = True
+                        disponibilidade.save()
+
+            # Atualizar agendamento com as novas datas
+            novo_agendamento.save()
+
+            # Bloquear novas datas
+            for dia in range((novo_agendamento.data_fim - novo_agendamento.data_inicio).days + 1):
+                data = novo_agendamento.data_inicio + timedelta(days=dia)
+                disponibilidade, created = Disponibilidade.objects.get_or_create(equipamento=novo_agendamento.equipamento, data=data)
+                disponibilidade.disponivel = False
+                disponibilidade.save()
+
+            return redirect('listar_agendamentos')
+    else:
+        form = AgendamentoForm(instance=agendamento)
+    return render(request, 'editar_agendamento.html', {'form': form})
+
+def apagar_agendamento(request, id):
+    agendamento = get_object_or_404(Agendamento, id=id)
+    if request.method == 'POST':
+        # Liberar as datas
+        for dia in range((agendamento.data_fim - agendamento.data_inicio).days + 1):
+            data = agendamento.data_inicio + timedelta(days=dia)
+            disponibilidade = Disponibilidade.objects.filter(equipamento=agendamento.equipamento, data=data).first()
+            if disponibilidade:
+                disponibilidade.disponivel = True
+                disponibilidade.save()
+
+        agendamento.delete()
+        return redirect('listar_agendamentos')
+    return render(request, 'apagar_agendamento.html', {'agendamento': agendamento})
+
+def get_cliente_details(request):
+    cliente_id = request.GET.get('cliente_id')
+    cliente = get_object_or_404(Cliente, id=cliente_id)
+    data = {
+        'nome_completo': cliente.nome_completo,
+        'cpf': cliente.cpf,
+        'data_nascimento': cliente.data_nascimento,
+        'email': cliente.email,
+        'telefone': cliente.telefone,
+        'documento_oficial': cliente.documento_oficial.url if cliente.documento_oficial else None,
+        'comprovante_residencia': cliente.comprovante_residencia.url if cliente.comprovante_residencia else None,
+    }
+    return JsonResponse(data)
+
+
+def listar_disponibilidades(request):
+    disponibilidades = Disponibilidade.objects.all()
+    return render(request, 'disponibilidade.html', {'disponibilidades': disponibilidades})
+
+def toggle_disponibilidade(request, id):
+    disponibilidade = get_object_or_404(Disponibilidade, id=id)
+    disponibilidade.disponivel = not disponibilidade.disponivel
+    disponibilidade.save()
+    return redirect('listar_disponibilidades')
+
+
+def listar_clientes(request):
+    clientes = Cliente.objects.all()
+    return render(request, 'clientes.html', {'clientes': clientes})
+
+def apagar_cliente(request, id):
+    cliente = get_object_or_404(Cliente, id=id)
+    if request.method == 'POST':
+        cliente.delete()
+        return redirect('listar_clientes')
+    return render(request, 'clientes.html', {'cliente': cliente})
+
+def detalhes_cliente(request, id):
+    cliente = get_object_or_404(Cliente, id=id)
+    return render(request, 'detalhes_cliente.html', {'cliente': cliente})

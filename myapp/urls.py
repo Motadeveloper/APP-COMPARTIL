@@ -23,5 +23,14 @@ urlpatterns = [
     path('apagar_categoria/<int:id>/', views.apagar_categoria, name='apagar_categoria'),
     path('gerenciar_faqs/', views.gerenciar_faqs, name='gerenciar_faqs'),
     path('faq/', views.listar_faqs, name='listar_faqs'),
+    path('agendamentos/', views.listar_agendamentos, name='listar_agendamentos'),
+    path('agendamentos/editar/<int:id>/', views.editar_agendamento, name='editar_agendamento'),
+    path('agendamentos/apagar/<int:id>/', views.apagar_agendamento, name='apagar_agendamento'),
+    path('cliente/details/', views.get_cliente_details, name='get_cliente_details'),
+    path('disponibilidades/', views.listar_disponibilidades, name='listar_disponibilidades'),
+    path('disponibilidade/toggle/<int:id>/', views.toggle_disponibilidade, name='toggle_disponibilidade'),
+    path('clientes/', views.listar_clientes, name='listar_clientes'),
+    path('clientes/apagar/<int:id>/', views.apagar_cliente, name='apagar_cliente'),
+    path('clientes/detalhes/<int:id>/', views.detalhes_cliente, name='detalhes_cliente'),
     
 ]

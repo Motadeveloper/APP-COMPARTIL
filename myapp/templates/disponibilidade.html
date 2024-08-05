@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Disponibilidade{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Lista de Disponibilidade</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Equipamento</th>
+                    <th>Data</th>
+                    <th>Disponibilidade</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for disponibilidade in disponibilidades %}
+                <tr>
+                    <td>{{ disponibilidade.equipamento.nome }}</td>
+                    <td>{{ disponibilidade.data|date:"j N Y" }}</td>
+                    <td>{{ disponibilidade.disponivel|yesno:"Disponível,Indisponível" }}</td>
+                    <td>
+                        <form action="{% url 'toggle_disponibilidade' disponibilidade.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm {% if disponibilidade.disponivel %}btn-danger{% else %}btn-success{% endif %}">
+                                {% if disponibilidade.disponivel %}Inativar{% else %}Ativar{% endif %}
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

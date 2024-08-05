@@ -20,6 +20,9 @@ class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
         fields = ['cpf', 'nome_completo', 'data_nascimento', 'email', 'telefone', 'documento_oficial', 'comprovante_residencia']
+        widgets = {
+            'data_nascimento': forms.DateInput(attrs={'type': 'date'}),
+        }
 
 
 class CategoriaForm(forms.ModelForm):

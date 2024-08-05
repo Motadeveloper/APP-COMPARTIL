@@ -7,6 +7,7 @@
     
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <title>Compartil Locações | Alugue extratora, câmeras, geradores sem sair de casa</title>
+    <link rel="icon" href="https://compartil.com.br/static/assets/img/logo.png" type="image/png">
 </head>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap">
     <style>
@@ -20,8 +21,6 @@
             font-size: 4em; /* Tamanho da fonte */
             font-weight: 700; /* Peso da fonte (grosso) */
         }
-        
-
     </style>
 <body>
     {% include 'navbar_cliente.html' %}
@@ -29,11 +28,9 @@
     <section class="hero" id="home" style="background-image: url('{% static 'assets/img/hero-banner.jpg' %}')">
     
         <div class="container">
-            <div class="banner">
+            <div class="banner fade-in">
                 <p style="color: white;">Alugue Agora</p>
                 <h2 style="color: white;">Sem sair de casa</h2>
-
-               
             </div>
         </div>
     </section>
@@ -41,7 +38,7 @@
     <section class="service">
         <div class="container">
             <ul class="service-list">
-                <li class="service-item">
+                <li class="service-item fade-in">
                     <div class="service-item-icon">
                         <img src="{% static 'assets/img/service-icon-1.png' %}" alt="Service icon">
                     </div>
@@ -50,7 +47,7 @@
                         <p class="service-item-text">no horário agendado</p>
                     </div>
                 </li>
-                <li class="service-item">
+                <li class="service-item fade-in">
                     <div class="service-item-icon">
                         <img src="{% static 'assets/img/service-icon-2.svg' %}" alt="Service icon">
                     </div>
@@ -59,7 +56,7 @@
                         <p class="service-item-text">Fácil manuseio </p>
                     </div>
                 </li>
-                <li class="service-item">
+                <li class="service-item fade-in">
                     <div class="service-item-icon">
                         <img src="{% static 'assets/img/service-icon-3.svg' %}" alt="Service icon">
                     </div>
@@ -68,7 +65,7 @@
                         <p class="service-item-text">Pix, Débito e Crédito</p>
                     </div>
                 </li>
-                <li class="service-item">
+                <li class="service-item fade-in">
                     <div class="service-item-icon">
                         <img src="{% static 'assets/img/service-icon-4.svg' %}" alt="Service icon">
                     </div>
@@ -92,7 +89,7 @@
             </div>
             
             {% for equipamento in equipamentos %}
-            <div class="card" data-category="{{ equipamento.categoria.id }}">
+            <div class="card fade-in" data-category="{{ equipamento.categoria.id }}">
                 <div class="card-header">
                     <h3>{{ equipamento.nome|truncatechars:10 }}</h3>
                     <p>{{ equipamento.descricao|truncatechars:40 }}</p>
@@ -119,7 +116,7 @@
         </section>
     </div>
 
-    <section class="centralize">
+    <section class="centralize fade-in">
         {% include 'faq.html' %}
     </section>
 

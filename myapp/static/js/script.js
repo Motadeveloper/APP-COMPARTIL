@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
         startBookingButton.addEventListener('click', function() {
             document.getElementById('detalhesEquipamentoContainer').style.display = 'none';
             document.getElementById('bookingFormContainer').style.display = 'block';
-            //document.getElementById('step1').scrollIntoView({ behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 
@@ -39,8 +39,8 @@ document.addEventListener("DOMContentLoaded", function() {
     let dataInicio = null;
     let dataFim = null;
 
-    function mostrarAlerta(mensagem) {
-        const alertContainer = document.getElementById('alert-container');
+    function mostrarAlerta(mensagem, containerId) {
+        const alertContainer = document.getElementById(containerId);
         alertContainer.innerHTML = `
             <div class="alert-card">
                 ${mensagem}
@@ -50,36 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         setTimeout(() => {
             alertContainer.innerHTML = '';
-            limparSelecao();
-        }, 2000); // Remove o alerta após 2 segundos
-    }
-
-    function mostrarAlertaStep2(mensagem) {
-        const alertContainerStep2 = document.getElementById('alert-container-step2');
-        alertContainerStep2.innerHTML = `
-            <div class="alert-card">
-                ${mensagem}
-                <div class="alert-timer"></div>
-            </div>
-        `;
-
-        setTimeout(() => {
-            alertContainerStep2.innerHTML = '';
-        }, 2000); // Remove o alerta após 2 segundos
-    }
-
-    function mostrarAlertaCPF(mensagem) {
-        const alertContainerCPF = document.getElementById('alert-container-cpf');
-        alertContainerCPF.innerHTML = `
-            <div class="alert-card">
-                ${mensagem}
-                <div class="alert-timer"></div>
-            </div>
-        `;
-
-        setTimeout(() => {
-            alertContainerCPF.innerHTML = '';
-        }, 2000); // Remove o alerta após 2 segundos
+        }, 2000);
     }
 
     function limparSelecao() {
@@ -154,6 +125,10 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 datasIndisponiveis = data.disponibilidades;
+
+                // Limpar datas antigas
+                dataContainer.innerHTML = '';
+
                 for (let i = 0; i < 30; i++) {
                     const dataAtual = new Date(hoje);
                     dataAtual.setDate(hoje.getDate() + i);
@@ -179,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 carregarHorariosDisponiveis(dataClicada, datasIndisponiveis[bolinha.dataset.date]?.horario_final_locacao);
                             } else if (dataClicada >= dataInicio) {
                                 if (!verificarDisponibilidadeIntervalo(dataInicio, dataClicada)) {
-                                    mostrarAlerta("Intervalo de datas selecionado contém datas indisponíveis. Por favor, selecione outro intervalo.");
+                                    mostrarAlerta("Intervalo de datas selecionado contém datas indisponíveis. Por favor, selecione outro intervalo.", 'alert-container');
                                 } else {
                                     dataFim = dataClicada;
                                     atualizarSelecao();
@@ -242,8 +217,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById('step1').style.display = 'none';
                 document.getElementById('step2').style.display = 'block';
                 document.getElementById('step2').style.overflow = 'hidden';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                mostrarAlerta("Por favor, selecione a data de início e fim da locação, bem como o horário de início.");
+                mostrarAlerta("Por favor, selecione a data de início e fim da locação, bem como o horário de início.", 'alert-container');
             }
         });
     }
@@ -253,7 +229,7 @@ document.addEventListener("DOMContentLoaded", function() {
         backToEquipamentoButton.addEventListener('click', function() {
             document.getElementById('bookingFormContainer').style.display = 'none';
             document.getElementById('detalhesEquipamentoContainer').style.display = 'block';
-            document.getElementById('detalhesEquipamentoContainer').scrollIntoView({ behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 
@@ -262,7 +238,7 @@ document.addEventListener("DOMContentLoaded", function() {
         backToStep1Button.addEventListener('click', function() {
             document.getElementById('step2').style.display = 'none';
             document.getElementById('step1').style.display = 'block';
-            document.getElementById('step1').scrollIntoView({ behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 
@@ -275,12 +251,21 @@ document.addEventListener("DOMContentLoaded", function() {
             const complemento = document.getElementById('complemento').value;
 
             if (!cep || !freteOpcao || !numero || !complemento) {
-                mostrarAlertaStep2("Por favor, preencha todos os campos obrigatórios antes de continuar.");
+                mostrarAlerta("Por favor, preencha todos os campos obrigatórios antes de continuar.", 'alert-container-step2');
             } else {
                 document.getElementById('step2').style.display = 'none';
                 document.getElementById('step3').style.display = 'block';
-                document.getElementById('step3').scrollIntoView({ behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+        });
+    }
+
+    const backToStep2Button = document.getElementById('backToStep2');
+    if (backToStep2Button) {
+        backToStep2Button.addEventListener('click', function() {
+            document.getElementById('step3').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 
@@ -289,7 +274,7 @@ document.addEventListener("DOMContentLoaded", function() {
         backToStep3Button.addEventListener('click', function() {
             document.getElementById('step4').style.display = 'none';
             document.getElementById('step3').style.display = 'block';
-            document.getElementById('step3').scrollIntoView({ behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 
@@ -298,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function() {
         backToStep3FromStep5Button.addEventListener('click', function() {
             document.getElementById('step5').style.display = 'none';
             document.getElementById('step3').style.display = 'block';
-            document.getElementById('step3').scrollIntoView({ behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
 
@@ -330,7 +315,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 if (data.error) {
                                     document.getElementById("step3").style.display = 'none';
                                     document.getElementById("step5").style.display = 'block';
-                                    document.getElementById('step5').scrollIntoView({ behavior: 'smooth' });
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
                                 } else {
                                     document.getElementById('confirm_nome_completo').innerText = data.nome_completo;
                                     document.getElementById('confirm_data_nascimento').innerText = formatarDataBrasileira(data.data_nascimento);
@@ -339,14 +324,14 @@ document.addEventListener("DOMContentLoaded", function() {
                                     document.getElementById('hidden_cliente_id').value = data.cliente_id;
                                     document.getElementById("step3").style.display = 'none';
                                     document.getElementById("step4").style.display = 'block';
-                                    document.getElementById('step4').scrollIntoView({ behavior: 'smooth' });
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
                                 }
                             })
                             .catch(error => {
                                 console.error('Erro ao verificar o CPF:', error);
                             });
                     } else {
-                        mostrarAlertaCPF('CPF inválido. Por favor, verifique e tente novamente.');
+                        mostrarAlerta('CPF inválido. Por favor, verifique e tente novamente.', 'alert-container-cpf');
                     }
                 })
                 .catch(error => {
@@ -367,7 +352,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     loadingSpinner.style.display = 'none';
                     if (data.error) {
-                        mostrarAlertaStep2(data.error);
+                        mostrarAlerta(data.error, 'alert-container-step2');
                         return;
                     }
                     const valorFrete = data.valor_frete.toFixed(2);
@@ -441,15 +426,22 @@ document.addEventListener("DOMContentLoaded", function() {
         previewImage(this, document.getElementById('comprovante_residencia_preview'));
     });
 
+    const submitStep5Button = document.getElementById('submitStep5');
+    if (submitStep5Button) {
+        submitStep5Button.addEventListener('click', function(event) {
+            const nomeCompleto = document.getElementById('nome_completo').value;
+            const dataNascimento = document.getElementById('data_nascimento').value;
+            const email = document.getElementById('email').value;
+            const telefone = document.getElementById('telefone').value;
+            const documentoOficial = document.getElementById('documento_oficial').files[0];
+            const comprovanteResidencia = document.getElementById('comprovante_residencia').files[0];
+
+            if (!nomeCompleto || !dataNascimento || !email || !telefone || !documentoOficial || !comprovanteResidencia) {
+                event.preventDefault();
+                mostrarAlerta("Por favor, preencha todos os campos obrigatórios antes de continuar.", 'alert-container-step5');
+            }
+        });
+    }
 
     carregarDatasIndisponiveis();
 });
-
-const backToStep2Button = document.getElementById('backToStep2');
-if (backToStep2Button) {
-    backToStep2Button.addEventListener('click', function() {
-        document.getElementById('step3').style.display = 'none';
-        document.getElementById('step2').style.display = 'block';
-        document.getElementById('step2').scrollIntoView({ behavior: 'smooth' });
-    });
-}

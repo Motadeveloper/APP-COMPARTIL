@@ -18,4 +18,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Simulate click on "All" category to show all cards initially
     document.querySelector('.category[data-category="all"]').click();
+
+    // Intersection Observer API for fade-in effect
+    const fadeInElements = document.querySelectorAll('.fade-in');
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    fadeInElements.forEach(element => {
+        observer.observe(element);
+    });
 });

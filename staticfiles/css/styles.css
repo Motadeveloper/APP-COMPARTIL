@@ -1,0 +1,240 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    padding: 10px; /* Adiciona margem em volta de todo o body */
+}
+
+
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 1200px) {
+    .container {
+        margin: 20px 30px; /* Margens para telas grandes */
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        margin: 20px 20px; /* Margens para tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 20px 15px; /* Margens para dispositivos móveis */
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin: 20px 10px; /* Margens para dispositivos móveis */
+    }
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.navbar {
+    background-color: #343a40;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: #fff;
+    padding: 14px 20px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.navbar a:hover {
+    background-color: #ddd;
+    color: #000;
+}
+
+.search-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.search-container form {
+    display: inline-block;
+}
+
+.search-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.search-container input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    margin-right: 10px;
+}
+
+.search-container button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.search-container button:hover {
+    background-color: #0056b3;
+}
+
+.cards-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    overflow: hidden;
+}
+
+.card img {
+    width: 100px; /* Definido para uma miniatura */
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.card-body h1, .card-body h5 {
+    margin: 0 0 10px;
+    color: #333;
+    text-align: center;
+}
+
+.card-body label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.card-body p {
+    margin: 5px 0;
+}
+
+.card .cancel-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #dc3545;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.card .cancel-button:hover {
+    background-color: #c82333;
+}
+
+/* Mensagem de alerta */
+.alert {
+    padding: 15px;
+    background-color: #4caf50; /* Verde */
+    color: white;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.alert.error {
+    background-color: #f44336; /* Vermelho */
+}
+
+.alert.info {
+    background-color: #2196f3; /* Azul */
+}
+
+/* Estilo para a mensagem de confirmação */
+.confirmation-dialog {
+    display: none; /* Inicialmente escondido */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.confirmation-dialog button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.confirmation-dialog .confirm {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.confirmation-dialog .cancel {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.confirmation-dialog .confirm:hover {
+    background-color: #c82333;
+}
+
+.confirmation-dialog .cancel:hover {
+    background-color: #5a6268;
+}
+
+.overlay {
+    display: none; /* Inicialmente escondido */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+

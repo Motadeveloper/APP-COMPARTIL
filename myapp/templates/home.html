@@ -1,33 +1,55 @@
 {% load static %}
-
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <title>Compartil Locações | Alugue extratora, câmeras, geradores sem sair de casa</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Alugue extratoras, câmeras, geradores e muito mais na Compartil Locações em Recife. Equipamentos de alta qualidade entregues na sua casa.">
+    <meta name="keywords" content="locadora de equipamentos, aluguel de extratoras, aluguel de câmeras, aluguel de geradores, Recife">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Compartil Locações | Alugue extratora, câmeras, geradores sem sair de casa">
+    <meta property="og:description" content="Alugue extratoras, câmeras, geradores e muito mais na Compartil Locações em Recife. Equipamentos de alta qualidade entregues na sua casa.">
+    <meta property="og:image" content="https://motadeveloper.com/compartil1.png">
+    <meta property="og:url" content="https://compartil.com.br">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Compartil Locações | Alugue extratora, câmeras, geradores sem sair de casa">
+    <meta name="twitter:description" content="Alugue extratoras, câmeras, geradores e muito mais na Compartil Locações em Recife. Equipamentos de alta qualidade entregues na sua casa.">
+    <meta name="twitter:image" content="https://motadeveloper.com/compartil1.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap">
+    
+    <!-- Favicon -->
     <link rel="icon" href="https://compartil.com.br/static/assets/img/logo.png" type="image/png">
-     <meta property="og:image" content="https://motadeveloper.com/compartil1.png">
-</head>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap">
+    
     <style>
         .banner h2 {
-            font-family: 'Poppins', sans-serif; /* Fonte personalizada */
-            font-size: 3.5em; /* Tamanho da fonte */
-            font-weight: 700; /* Peso da fonte (grosso) */
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5em;
+            font-weight: 700;
         }
         .banner p {
-            font-family: 'Poppins', sans-serif; /* Fonte personalizada */
-            font-size: 4em; /* Tamanho da fonte */
-            font-weight: 700; /* Peso da fonte (grosso) */
+            font-family: 'Poppins', sans-serif;
+            font-size: 4em;
+            font-weight: 700;
         }
     </style>
+</head>
 <body>
     {% include 'navbar_cliente.html' %}
     
     <section class="hero" id="home" style="background-image: url('{% static 'assets/img/hero-banner.jpg' %}')">
-    
         <div class="container">
             <div class="banner fade-in">
                 <p style="color: white;">Alugue Agora</p>
@@ -41,7 +63,7 @@
             <ul class="service-list">
                 <li class="service-item fade-in">
                     <div class="service-item-icon">
-                        <img src="{% static 'assets/img/service-icon-1.png' %}" alt="Service icon">
+                        <img src="{% static 'assets/img/service-icon-1.png' %}" alt="Pontualidade">
                     </div>
                     <div class="service-content">
                         <p class="service-item-title">Pontualidade</p>
@@ -50,7 +72,7 @@
                 </li>
                 <li class="service-item fade-in">
                     <div class="service-item-icon">
-                        <img src="{% static 'assets/img/service-icon-2.svg' %}" alt="Service icon">
+                        <img src="{% static 'assets/img/service-icon-2.svg' %}" alt="Video Tutorial">
                     </div>
                     <div class="service-content">
                         <p class="service-item-title">Video Tutorial</p>
@@ -59,7 +81,7 @@
                 </li>
                 <li class="service-item fade-in">
                     <div class="service-item-icon">
-                        <img src="{% static 'assets/img/service-icon-3.svg' %}" alt="Service icon">
+                        <img src="{% static 'assets/img/service-icon-3.svg' %}" alt="Pague na Entrega">
                     </div>
                     <div class="service-content">
                         <p class="service-item-title">Pague na Entrega</p>
@@ -68,7 +90,7 @@
                 </li>
                 <li class="service-item fade-in">
                     <div class="service-item-icon">
-                        <img src="{% static 'assets/img/service-icon-4.svg' %}" alt="Service icon">
+                        <img src="{% static 'assets/img/service-icon-4.svg' %}" alt="Whatsapp">
                     </div>
                     <div class="service-content">
                         <p class="service-item-title">Whatsapp</p>
@@ -83,7 +105,7 @@
         <section class="card-container" id="equipamentos">
             <h1>Equipamentos</h1>
             <div class="categories">
-                <span class="category active" data-category="all" style="background-color: #000; color: #ffffff;">All</span>
+                <span class="category active" data-category="all" style="background-color: #000; color: #ffffff;">Todos</span>
                 {% for categoria in categorias %}
                 <span class="category" data-category="{{ categoria.id }}" style="background-color: {{ categoria.cor }}; color: #ffffff;">{{ categoria.nome }}</span>
                 {% endfor %}
@@ -121,13 +143,12 @@
         {% include 'faq.html' %}
     </section>
 
-        {% include 'footer.html' %}
-   
-
+    {% include 'footer.html' %}
+    
+    <!-- JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="{% static 'js/home.js' %}"></script>
-    
 </body>
 </html>

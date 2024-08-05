@@ -40,8 +40,8 @@ class Equipamento(models.Model):
     fotos = models.ImageField(upload_to='equipamentos/', null=True)
     descricao = models.TextField(null=True)
     preco_diaria = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True)  # Adicionando categoria
-    
+    categoria = models.ForeignKey('Categoria', on_delete=models.SET_NULL, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.nome

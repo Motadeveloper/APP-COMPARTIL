@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+from django.contrib.sitemaps.views import sitemap
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,6 +32,7 @@ INSTALLED_APPS = [
     'myapp',
     'frete',
     'calendario',
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +129,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+

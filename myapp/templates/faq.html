@@ -1,10 +1,38 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/faq.css' %}">
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | Compartil Locações</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Tire suas dúvidas sobre a locação de equipamentos na Compartil Locações. Respostas para as perguntas mais frequentes sobre aluguel de extratoras, câmeras, geradores e muito mais.">
+    <meta name="keywords" content="locadora de equipamentos, aluguel de extratoras, aluguel de câmeras, aluguel de geradores, FAQ, perguntas frequentes, Compartil Locações">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="FAQ | Compartil Locações">
+    <meta property="og:description" content="Tire suas dúvidas sobre a locação de equipamentos na Compartil Locações. Respostas para as perguntas mais frequentes sobre aluguel de extratoras, câmeras, geradores e muito mais.">
+    <meta property="og:image" content="{% static 'assets/img/icon-star.svg' %}">
+    <meta property="og:url" content="https://compartil.com.br/faq">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FAQ | Compartil Locações">
+    <meta name="twitter:description" content="Tire suas dúvidas sobre a locação de equipamentos na Compartil Locações. Respostas para as perguntas mais frequentes sobre aluguel de extratoras, câmeras, geradores e muito mais.">
+    <meta name="twitter:image" content="{% static 'assets/img/icon-star.svg' %}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/faq.css' %}">
+</head>
+<body>
 
 <div class="section-parent">
     <div class="faq-container">
         <div class="header-container">
-            <img src="{% static 'assets/img/icon-star.svg' %}" alt="icon-star">
+            <img src="{% static 'assets/img/icon-star.svg' %}" alt="Estrela" class="icon-star">
             <h1 class="heading">Dúvidas</h1>
         </div>
         {% if faqs %}
@@ -12,12 +40,10 @@
             <div class="faq-item">
                 <h2 class="question" data-faq="{{ faq.id }}">
                     {{ faq.titulo }}
-                    <img src="{% static 'assets/img/icon-minus.svg' %}" alt="icon-minus" class="icon" id="icon-minus-{{ faq.id }}">
-                    <img src="{% static 'assets/img/icon-plus.svg' %}" alt="icon-plus" class="icon" id="icon-plus-{{ faq.id }}">
+                    <img src="{% static 'assets/img/icon-minus.svg' %}" alt="Ícone de menos" class="icon" id="icon-minus-{{ faq.id }}">
+                    <img src="{% static 'assets/img/icon-plus.svg' %}" alt="Ícone de mais" class="icon" id="icon-plus-{{ faq.id }}">
                 </h2>
-                <p>
-                    {{ faq.descricao }}
-                </p>
+                <p>{{ faq.descricao }}</p>
             </div>
             {% endfor %}
         {% else %}
@@ -26,5 +52,6 @@
     </div>
 </div>
 
-
 <script src="{% static 'js/faq.js' %}"></script>
+</body>
+</html>

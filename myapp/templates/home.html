@@ -111,31 +111,34 @@
                 {% endfor %}
             </div>
             
-            {% for equipamento in equipamentos %}
-            <div class="card fade-in" data-category="{{ equipamento.categoria.id }}">
-                <div class="card-header">
-                    <h3>{{ equipamento.nome|truncatechars:10 }}</h3>
-                    <p>{{ equipamento.descricao|truncatechars:40 }}</p>
-                    <span style="background-color: {{ equipamento.categoria.cor }}; color: #ffffff;">{{ equipamento.categoria.nome }}</span>
-                </div>
-                <div class="card-img">
-                    <img src="{{ equipamento.fotos.url }}" alt="{{ equipamento.nome }}">
-                    <i class="bx bx-heart"></i>
-                </div>
-                <div class="card-details">
-                    <div class="price">
-                        <p>Diária</p>
-                        <strong>R${{ equipamento.preco_diaria }}</strong>
+            <div class="row">
+                {% for equipamento in equipamentos %}
+                <div class="col-lg-4 col-md-6 col-12 mb-4">
+                    <div class="card fade-in" data-category="{{ equipamento.categoria.id }}">
+                        <div class="card-header">
+                            <h3>{{ equipamento.nome|truncatechars:10 }}</h3>
+                            <p>{{ equipamento.descricao|truncatechars:40 }}</p>
+                            <span style="background-color: {{ equipamento.categoria.cor }}; color: #ffffff;">{{ equipamento.categoria.nome }}</span>
+                        </div>
+                        <div class="card-img">
+                            <img src="{{ equipamento.fotos.url }}" alt="{{ equipamento.nome }}">
+                            <i class="bx bx-heart"></i>
+                        </div>
+                        <div class="card-details">
+                            <div class="price">
+                                <p>Diária</p>
+                                <strong>R${{ equipamento.preco_diaria }}</strong>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'detalhes_equipamento' equipamento.id %}">
+                                <button>Alugue agora</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <a href="{% url 'detalhes_equipamento' equipamento.id %}">
-                    </br>
-                        <button>Alugue agora</button>
-                    </a>
-                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </section>
     </div>
 

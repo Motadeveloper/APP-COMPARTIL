@@ -169,6 +169,14 @@ def detalhes_equipamento(request, id):
                 )
 
             messages.success(request, f'Você acabou de alugar uma {equipamento.nome}. Nossa equipe entrará em contato para mais informações.')
+            # Comentando o envio de e-mail para resolver o problema de configuração
+            # send_mail(
+            #     'Novo Agendamento Realizado',
+            #     f'Um novo agendamento foi realizado para {equipamento.nome}.',
+            #     'agendamento@compartil.com.br',
+            #     ['destinatario@example.com'],
+            #     fail_silently=False,
+            # )
             return render(request, 'detalhes_equipamento.html', {'equipamento': equipamento, 'form': form, 'success': True})
     else:
         form = AgendamentoForm()

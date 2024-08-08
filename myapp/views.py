@@ -4,6 +4,7 @@ from .forms import EquipamentoForm, AgendamentoForm, ClienteForm, CategoriaForm,
 from .models import Equipamento, Disponibilidade, Agendamento, Categoria, FAQ
 from datetime import date, timedelta, datetime, time
 from django.views.decorators.http import require_GET
+from django.contrib.auth.decorators import login_required
 import re
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -15,9 +16,11 @@ def mysite(request):
     faqs = FAQ.objects.all()
     return render(request, 'home.html', {'categorias': categorias, 'equipamentos': equipamentos, 'faqs': faqs})
 
+@login_required
 def painel(request):
     return render(request, 'index.html')
 
+@login_required
 def adicionar_equipamento(request):
     if request.method == 'POST':
         form = EquipamentoForm(request.POST, request.FILES)
@@ -31,6 +34,7 @@ def adicionar_equipamento(request):
 def equipamento_sucesso(request):
     return render(request, 'equipamento_sucesso.html')
 
+@login_required
 def listar_equipamentos(request):
     equipamentos = Equipamento.objects.all()
     hoje = date.today()
@@ -40,6 +44,7 @@ def listar_equipamentos(request):
         equipamento.disponibilidade_fim = disponibilidades.last().data if disponibilidades.exists() else None
     return render(request, 'lista_equipamentos.html', {'equipamentos': equipamentos})
 
+@login_required
 def editar_equipamento(request, id):
     equipamento = get_object_or_404(Equipamento, id=id)
     if request.method == 'POST':
@@ -51,6 +56,7 @@ def editar_equipamento(request, id):
         form = EquipamentoForm(instance=equipamento)
     return render(request, 'editar_equipamento.html', {'form': form})
 
+@login_required
 def apagar_equipamento(request, id):
     equipamento = get_object_or_404(Equipamento, id=id)
     if request.method == 'POST':
@@ -239,6 +245,7 @@ def cancelar_agendamento(request, agendamento_id):
     messages.success(request, 'Agendamento cancelado com sucesso.')
     return HttpResponseRedirect(reverse('cliente'))
 
+@login_required
 def adicionar_categoria(request):
     if request.method == 'POST':
         form = CategoriaForm(request.POST)
@@ -252,6 +259,7 @@ def adicionar_categoria(request):
     categorias = Categoria.objects.all()
     return render(request, 'adicionar_categoria.html', {'form': form, 'categorias': categorias})
 
+@login_required
 def editar_categoria(request, id):
     categoria = get_object_or_404(Categoria, id=id)
     if request.method == 'POST':
@@ -266,6 +274,7 @@ def editar_categoria(request, id):
     categorias = Categoria.objects.all()
     return render(request, 'adicionar_categoria.html', {'form': form, 'categorias': categorias})
 
+@login_required
 def apagar_categoria(request, id):
     categoria = get_object_or_404(Categoria, id=id)
     if request.method == 'POST':
@@ -276,6 +285,7 @@ def apagar_categoria(request, id):
     categorias = Categoria.objects.all()
     return render(request, 'adicionar_categoria.html', {'form': CategoriaForm(), 'categorias': categorias})
 
+@login_required
 def gerenciar_faqs(request):
     if request.method == 'POST':
         if 'criar' in request.POST:
@@ -300,14 +310,17 @@ def gerenciar_faqs(request):
         faqs = FAQ.objects.all()
     return render(request, 'gerenciar_faqs.html', {'form': form, 'faqs': faqs})
 
+
 def listar_faqs(request):
     faqs = FAQ.objects.all()
     return render(request, 'faq.html', {'faqs': faqs})
 
+@login_required
 def listar_agendamentos(request):
     agendamentos = Agendamento.objects.all().order_by('data_inicio', 'hora_inicio')
     return render(request, 'agendamento.html', {'agendamentos': agendamentos})
 
+@login_required
 def editar_agendamento(request, id):
     agendamento = get_object_or_404(Agendamento, id=id)
     if request.method == 'POST':
@@ -337,6 +350,7 @@ def editar_agendamento(request, id):
         form = AgendamentoForm(instance=agendamento)
     return render(request, 'editar_agendamento.html', {'form': form})
 
+@login_required
 def apagar_agendamento(request, id):
     agendamento = get_object_or_404(Agendamento, id=id)
     if request.method == 'POST':
@@ -365,20 +379,24 @@ def get_cliente_details(request):
     }
     return JsonResponse(data)
 
+@login_required
 def listar_disponibilidades(request):
     disponibilidades = Disponibilidade.objects.all()
     return render(request, 'disponibilidade.html', {'disponibilidades': disponibilidades})
 
+@login_required
 def toggle_disponibilidade(request, id):
     disponibilidade = get_object_or_404(Disponibilidade, id=id)
     disponibilidade.disponivel = not disponibilidade.disponivel
     disponibilidade.save()
     return redirect('listar_disponibilidades')
 
+@login_required
 def listar_clientes(request):
     clientes = Cliente.objects.all()
     return render(request, 'clientes.html', {'clientes': clientes})
 
+@login_required
 def apagar_cliente(request, id):
     cliente = get_object_or_404(Cliente, id=id)
     if request.method == 'POST':

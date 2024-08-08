@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.db import models
+from django.core.mail import send_mail
+from django.conf import settings
 
 class Categoria(models.Model):
     nome = models.CharField(max_length=100)
@@ -80,3 +82,17 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.titulo
+
+
+def enviar_notificacao_agendamento(agendamento):
+    assunto = 'Novo Agendamento Realizado'
+    mensagem = f'Um novo agendamento foi realizado:\n\nEquipamento: {agendamento.equipamento.nome}\nCliente: {agendamento.cliente.nome_completo}\nData Início: {agendamento.data_inicio}\nData Fim: {agendamento.data_fim}'
+    remetente = settings.DEFAULT_FROM_EMAIL
+    destinatario = ['agendamento@compartil.com.br']
+    
+    send_mail(assunto, mensagem, remetente, destinatario)
+
+@receiver(post_save, sender=Agendamento)
+def notificar_novo_agendamento(sender, instance, created, **kwargs):
+    if created:
+        enviar_notificacao_agendamento(instance)

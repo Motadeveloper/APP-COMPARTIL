@@ -5,8 +5,6 @@ class EquipamentoForm(forms.ModelForm):
     class Meta:
         model = Equipamento
         fields = ['nome', 'fotos', 'descricao', 'preco_diaria', 'categoria']
- 
-
 
 class AgendamentoForm(forms.ModelForm):
     class Meta:
@@ -24,7 +22,6 @@ class ClienteForm(forms.ModelForm):
             'data_nascimento': forms.DateInput(attrs={'type': 'date'}),
         }
 
-
 class CategoriaForm(forms.ModelForm):
     class Meta:
         model = Categoria
@@ -32,7 +29,6 @@ class CategoriaForm(forms.ModelForm):
         widgets = {
             'cor': forms.TextInput(attrs={'type': 'color'}),
         }
-
 
 class FAQForm(forms.ModelForm):
     class Meta:

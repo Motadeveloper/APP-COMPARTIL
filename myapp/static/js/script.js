@@ -18,6 +18,12 @@ document.addEventListener("DOMContentLoaded", function() {
     const freteSelecionado = document.getElementById('frete-selecionado');
     const tipoFrete = document.getElementById('tipo-frete');
     const detalhesEquipamentoContainer = document.getElementById('detalhesEquipamentoContainer');
+    
+    if (!detalhesEquipamentoContainer) {
+        console.error('Elemento detalhesEquipamentoContainer não encontrado!');
+        return; // Saia do script se o elemento não existir
+    }
+
     const equipamentoId = detalhesEquipamentoContainer.dataset.equipId;
     let valorDiaria;
 
@@ -36,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
     fetchValorDiaria();
 
     const hoje = new Date();
+    const horarioFinalAtendimento = 17; // Definindo o horário final de atendimento
     let dataInicio = null;
     let dataFim = null;
 
@@ -141,7 +148,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     bolinha.innerHTML = `<span>${dia}</span><small>${mes}</small><small class="day-name">${diaSemana}</small>`;
                     bolinha.dataset.date = dataAtual.toISOString().split('T')[0];
 
-                    if (datasIndisponiveis[bolinha.dataset.date]?.disponivel === false) {
+                    // Verifica se é a data atual e se a hora atual é após o horário de atendimento
+                    if (dataAtual.toDateString() === hoje.toDateString() && hoje.getHours() >= horarioFinalAtendimento) {
+                        bolinha.classList.add('indisponivel');
+                        bolinha.classList.add('disabled');
+                    } else if (datasIndisponiveis[bolinha.dataset.date]?.disponivel === false) {
                         bolinha.classList.add('indisponivel');
                         bolinha.classList.add('disabled');
                     } else {

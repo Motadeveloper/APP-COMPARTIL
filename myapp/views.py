@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from .forms import EquipamentoForm, AgendamentoForm, Cliente, ClienteForm, CategoriaForm, FAQForm
+from .forms import EquipamentoForm, AgendamentoForm, ClienteForm, CategoriaForm, FAQForm, Cliente
 from .models import Equipamento, Disponibilidade, Agendamento, Categoria, FAQ
 from datetime import date, timedelta, datetime, time
 from django.views.decorators.http import require_GET
@@ -9,8 +9,6 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 
-
-# Create your views here.
 def mysite(request):
     categorias = Categoria.objects.all()
     equipamentos = Equipamento.objects.all()
@@ -74,7 +72,7 @@ def get_disponibilidade(request, equipamento_id):
     if ultima_reserva:
         data_fim = ultima_reserva.data
         if ultima_reserva.horario_final_locacao:
-            hora_fim = datetime.combine(data_fim, ultima_reserva.horario_final_locacao) + timedelta(hours=2)  # 2h após o horário final
+            hora_fim = datetime.combine(data_fim, ultima_reserva.horario_final_locacao) + timedelta(hours=2)
             ultima_reserva_info = {
                 'data_fim': data_fim.isoformat(),
                 'hora_fim': hora_fim.time().isoformat()
@@ -142,12 +140,10 @@ def detalhes_equipamento(request, id):
             else:
                 return render(request, 'detalhes_equipamento.html', {'equipamento': equipamento, 'form': form, 'error': 'Hora de início não definida.'})
 
-            # Salvar o valor total
             agendamento.valor_total = form.cleaned_data['valor_total']
 
             agendamento.save()
             
-            # Atualizar a tabela de disponibilidade
             data_atual = agendamento.data_inicio
             while data_atual <= agendamento.data_fim:
                 Disponibilidade.objects.update_or_create(
@@ -157,7 +153,6 @@ def detalhes_equipamento(request, id):
                 )
                 data_atual += timedelta(days=1)
             
-            # Atualizar a disponibilidade do próximo dia com base na hora_fim
             proxima_data = agendamento.data_fim
             horario_final = (datetime.combine(proxima_data, agendamento.hora_fim) + timedelta(hours=2)).time()
             if horario_final < time(17, 0):
@@ -207,7 +202,6 @@ def get_valor_diaria(request, equipamento_id):
 def consultarcliente(request):
     return render(request, 'cliente.html')
 
-# Função para validar CPF
 def validar_cpf(cpf):
     cpf = ''.join(filter(str.isdigit, cpf))
     if len(cpf) != 11 or cpf == cpf[0] * len(cpf):
@@ -319,26 +313,19 @@ def editar_agendamento(request, id):
     if request.method == 'POST':
         form = AgendamentoForm(request.POST, instance=agendamento)
         if form.is_valid():
-            # Armazenar as datas antigas antes de salvar o novo agendamento
             datas_antigas = [(agendamento.data_inicio + timedelta(days=dia)) for dia in range((agendamento.data_fim - agendamento.data_inicio).days + 1)]
-
-            # Salvar o novo agendamento sem commitar ainda
             novo_agendamento = form.save(commit=False)
 
-            # Liberar datas antigas
             for data in datas_antigas:
                 disponibilidade = Disponibilidade.objects.filter(equipamento=agendamento.equipamento, data=data).first()
                 if disponibilidade:
-                    # Verifica se existe algum outro agendamento para esta data
                     outros_agendamentos = Agendamento.objects.filter(equipamento=agendamento.equipamento, data_inicio__lte=data, data_fim__gte=data).exclude(id=agendamento.id)
                     if not outros_agendamentos.exists():
                         disponibilidade.disponivel = True
                         disponibilidade.save()
 
-            # Atualizar agendamento com as novas datas
             novo_agendamento.save()
 
-            # Bloquear novas datas
             for dia in range((novo_agendamento.data_fim - novo_agendamento.data_inicio).days + 1):
                 data = novo_agendamento.data_inicio + timedelta(days=dia)
                 disponibilidade, created = Disponibilidade.objects.get_or_create(equipamento=novo_agendamento.equipamento, data=data)
@@ -353,7 +340,6 @@ def editar_agendamento(request, id):
 def apagar_agendamento(request, id):
     agendamento = get_object_or_404(Agendamento, id=id)
     if request.method == 'POST':
-        # Liberar as datas
         for dia in range((agendamento.data_fim - agendamento.data_inicio).days + 1):
             data = agendamento.data_inicio + timedelta(days=dia)
             disponibilidade = Disponibilidade.objects.filter(equipamento=agendamento.equipamento, data=data).first()
@@ -379,7 +365,6 @@ def get_cliente_details(request):
     }
     return JsonResponse(data)
 
-
 def listar_disponibilidades(request):
     disponibilidades = Disponibilidade.objects.all()
     return render(request, 'disponibilidade.html', {'disponibilidades': disponibilidades})
@@ -389,7 +374,6 @@ def toggle_disponibilidade(request, id):
     disponibilidade.disponivel = not disponibilidade.disponivel
     disponibilidade.save()
     return redirect('listar_disponibilidades')
-
 
 def listar_clientes(request):
     clientes = Cliente.objects.all()

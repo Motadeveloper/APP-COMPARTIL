@@ -51,7 +51,6 @@ class Disponibilidade(models.Model):
     data = models.DateField(null=True)
     disponivel = models.BooleanField(default=True)
     horario_final_locacao = models.TimeField(null=True, blank=True)
-    
 
     def __str__(self):
         return f"{self.equipamento.nome} - {self.data} - {'Disponível' if self.disponivel else 'Indisponível'}"
@@ -71,7 +70,7 @@ class Agendamento(models.Model):
     complemento = models.CharField(max_length=255, blank=True, null=True)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, null=True)
     valor_total = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    
+
     def __str__(self):
         return f"Agendamento de {self.equipamento.nome} para {self.cliente.nome_completo}"
     

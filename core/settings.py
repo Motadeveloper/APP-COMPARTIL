@@ -130,7 +130,7 @@ EMAIL_PORT = 465
 EMAIL_USE_TLS = False  # Use True se estiver usando TLS
 EMAIL_USE_SSL = True 
 EMAIL_HOST_USER = 'agendamento@compartil.com.br'
-EMAIL_HOST_PASSWORD = 'Mm2024-@'
+EMAIL_HOST_PASSWORD = 'Mm90909090-@'
 DEFAULT_FROM_EMAIL = 'agendamento@compartil.com.br'
 
 LOGIN_URL = 'login'

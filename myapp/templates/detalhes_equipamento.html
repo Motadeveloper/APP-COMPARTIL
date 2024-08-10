@@ -30,16 +30,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PXLYKM45MF">
-</script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PXLYKM45MF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-  gtag('config', 'G-PXLYKM45MF');
-</script>
+        gtag('config', 'G-PXLYKM45MF');
+    </script>
 </head>
 <body>
     {% include 'navbar_cliente.html' %}
@@ -123,9 +123,13 @@
                                 <div class="card-body">
                                     <h3>Selecione a data de inicio e final de locação</h3>
                                     </br>
-                                    <div id="alert-container" class="alert-container"></div>
+                                    <div id="alert-container" class="alert-container"></div> <!-- Contêiner para o alerta -->
                                     <div id="data-container" class="d-flex flex-wrap">
-                                        <!-- As bolinhas das datas serão inseridas aqui -->
+                                        {% for data in datas_futuras %}
+                                            <div class="data-bolinha" data-date="{{ data }}">
+                                                <span>{{ data.day }}</span><small>{{ data|date:"M" }}</small>
+                                            </div>
+                                        {% endfor %}
                                     </div>
                                      </br>
                                     <div id="hora-container" style="display:none;">
@@ -148,7 +152,7 @@
                             <div class="card mb-4">
                                 <div class="card-body">
                                     <h3>Calcular Frete</h3>
-                                    <div id="alert-container-step2" class="alert-container"></div>
+                                    <div id="alert-container-step2" class="alert-container"></div> <!-- Contêiner para o alerta -->
                                     <input type="text" id="cep" class="cep-input" placeholder="Informe seu CEP" data-equip-id="{{ equipamento.id }}">
                                     <button type="button" class="btn btn-primary calcular-frete" data-equip-id="{{ equipamento.id }}">Calcular Frete</button>
                                     <div class="loading-spinner" id="loading" style="display:none;"></div>
